@@ -2,6 +2,8 @@
 
 > Practical, privacy-preserving notes for operating a Home Assistant setup that bridges a property-developer RS-485 gateway with other smart-home ecosystems.
 
+中文说明: [README.zh-CN.md](README.zh-CN.md)
+
 ## Attribution
 
 This repository is **not** the original HYQW Home Assistant integration.
@@ -12,6 +14,31 @@ The core adapter used in the referenced deployment is the open-source project:
 - Original author / code owner: `@origintree`
 
 This repository is a companion collection of **sanitized operational recipes, architecture notes, and Home Assistant automation templates** learned from a real deployment.
+
+## Architecture
+
+```mermaid
+flowchart TD
+    A[Property RS-485 devices<br/>lights / HVAC / floor heating / curtains / fresh air] --> B[Developer RS-485 gateway]
+    B --> C[Vendor cloud API]
+    B --> D[MQTT status/control path]
+    C --> E[origintree/hyqw_adapter<br/>Home Assistant custom integration]
+    D --> E
+    E --> F[Home Assistant]
+
+    G[Mijia / Xiaomi devices] --> F
+    H[Midea / Toshiba appliances] --> F
+    I[Optional local MQTT broker / bridge] --> F
+
+    F --> J[Automations<br/>control-boundary rules]
+    F --> K[Dashboards / monitoring]
+    F --> L[Notifications / agent workflows]
+
+    M[Router or always-on edge watchdog<br/>design pattern only] -. recovery window .-> B
+    M -. fallback check .-> C
+```
+
+The important boundary is that the upstream adapter handles protocol integration, while this repo documents the surrounding operational patterns: verification, recovery, control boundaries, and privacy-safe templates.
 
 ## What this repo contributes
 
