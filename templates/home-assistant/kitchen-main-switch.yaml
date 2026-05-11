@@ -1,0 +1,57 @@
+# Kitchen main-circuit keep-on pattern
+#
+# Purpose:
+# - Keep the developer/RS-485 main circuit switch on during the active window.
+# - Do NOT control the individual downstream smart lights.
+#
+# Replace:
+# - light.<MAIN_CIRCUIT_ENTITY> with your main circuit entity.
+#
+# Active window in this example: 07:00 to next day 02:00.
+
+- id: kitchen_main_circuit_on_morning
+  alias: Kitchen main circuit - on at 07:00
+  description: Keep only the main circuit on; do not control individual smart lights.
+  mode: single
+  triggers:
+    - platform: time
+      at: "07:00:00"
+  conditions: []
+  actions:
+    - action: light.turn_on
+      target:
+        entity_id: light.<MAIN_CIRCUIT_ENTITY>
+
+- id: kitchen_main_circuit_off_2am
+  alias: Kitchen main circuit - off at 02:00
+  description: Turn off only the main circuit at the end of the active window.
+  mode: single
+  triggers:
+    - platform: time
+      at: "02:00:00"
+  conditions: []
+  actions:
+    - action: light.turn_off
+      target:
+        entity_id: light.<MAIN_CIRCUIT_ENTITY>
+
+- id: kitchen_main_circuit_keep_on_active_window
+  alias: Kitchen main circuit - keep on from 07:00 to 02:00
+  description: If the main circuit is turned off during the active window, turn it back on after 5 seconds. Individual smart lights are intentionally not controlled.
+  mode: restart
+  triggers:
+    - platform: state
+      entity_id: light.<MAIN_CIRCUIT_ENTITY>
+      to: "off"
+  conditions:
+    - condition: template
+      value_template: "{{ now().hour >= 7 or now().hour < 2 }}"
+  actions:
+    - delay:
+        seconds: 5
+    - condition: state
+      entity_id: light.<MAIN_CIRCUIT_ENTITY>
+      state: "off"
+    - action: light.turn_on
+      target:
+        entity_id: light.<MAIN_CIRCUIT_ENTITY>

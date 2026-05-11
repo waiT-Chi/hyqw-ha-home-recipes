@@ -1,0 +1,7 @@
+.DS_Store
+.env
+*.log
+*.har
+.storage/
+secrets.yaml
+known_hosts

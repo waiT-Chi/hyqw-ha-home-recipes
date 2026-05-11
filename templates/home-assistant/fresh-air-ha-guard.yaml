@@ -1,0 +1,41 @@
+# Fresh-air Home Assistant guard pattern
+#
+# Purpose:
+# - Fallback guard for a fresh-air system that may restore to ON after a power outage.
+# - This is not a replacement for an always-on edge watchdog if Home Assistant itself may be offline.
+#
+# Replace:
+# - fan.<FRESH_AIR_ENTITY>
+# - notify.<YOUR_NOTIFY_SERVICE>
+# - sensor.<GATEWAY_STATUS_ENTITY> if you have one
+
+- id: fresh_air_power_restore_guard
+  alias: Fresh air - power restore guard
+  description: On Home Assistant start or gateway reconnect, close the fresh-air system if it appears to have restored to ON. Normal manual use is not monitored by this automation.
+  mode: restart
+  triggers:
+    - platform: homeassistant
+      event: start
+      id: ha_start
+    - platform: state
+      entity_id: sensor.<GATEWAY_STATUS_ENTITY>
+      to: "connected"
+      id: gateway_recovered
+  conditions: []
+  actions:
+    - delay: "00:00:45"
+    - wait_template: "{{ is_state('fan.<FRESH_AIR_ENTITY>', 'on') }}"
+      timeout: "00:05:00"
+      continue_on_timeout: false
+    - delay: "00:00:20"
+    - condition: state
+      entity_id: fan.<FRESH_AIR_ENTITY>
+      state: "on"
+    - action: fan.turn_off
+      target:
+        entity_id: fan.<FRESH_AIR_ENTITY>
+    - delay: "00:00:03"
+    - action: notify.<YOUR_NOTIFY_SERVICE>
+      data:
+        title: Fresh air closed
+        message: "Fresh-air system was ON during a recovery window and has been closed."
