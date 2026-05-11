@@ -52,6 +52,19 @@ flowchart TD
 - 如何处理断电后来电时某些设备恢复到错误默认状态；
 - 如何在 Home Assistant 修改自动化后做写后验证，而不是只相信 API 返回成功；
 - 记录真实家庭里容易踩坑、但官方文档通常不会覆盖的问题。
+- 提供少量去敏后的辅助脚本，用于 HA REST 检查、实体清单去敏导出和发布前泄密扫描。
+
+## 代码示例
+
+现在仓库里不只是文档，也包含一层安全的工程代码：
+
+- [`scripts/ha_fresh_air_guard.py`](scripts/ha_fresh_air_guard.py)：HA REST 新风恢复防护脚本；
+- [`scripts/ha_entity_snapshot.py`](scripts/ha_entity_snapshot.py)：HA 实体清单去敏导出工具；
+- [`scripts/sanitize_check.py`](scripts/sanitize_check.py)：发布前敏感信息扫描工具；
+- [`examples/systemd/`](examples/systemd/)：开机后执行恢复检查的 timer/service 示例；
+- [`.github/workflows/sanity.yml`](.github/workflows/sanity.yml)：编译脚本并运行敏感信息扫描的 CI。
+
+这些代码只覆盖外围运维层，不包含真实厂商 API、设备 SN、MQTT topic 或 replay payload。详细说明见 [`docs/code-examples.md`](docs/code-examples.md)。
 
 ## 本仓库故意不包含什么
 
@@ -76,9 +89,21 @@ flowchart TD
 ```text
 docs/
   architecture.md              # 去敏架构和边界说明
+  code-examples.md              # 去敏后的辅助代码说明
   contribution-scope.md         # 本仓库与上游 hyqw_adapter 的分工
   patterns.md                  # 可复用 HA / 家庭运维模式
   security-and-privacy.md       # 去敏和负责任分享说明
+
+scripts/
+  ha_fresh_air_guard.py          # HA REST 新风恢复防护脚本，不含厂商 payload
+  ha_entity_snapshot.py          # HA 实体清单去敏导出工具
+  sanitize_check.py              # 发布前敏感信息扫描工具
+
+.github/
+  workflows/sanity.yml           # 编译 + 敏感信息扫描 CI
+
+examples/
+  systemd/                       # 开机恢复检查 timer/service 示例
 
 templates/
   home-assistant/

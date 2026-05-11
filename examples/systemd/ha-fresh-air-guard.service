@@ -1,0 +1,12 @@
+[Unit]
+Description=Home Assistant fresh-air recovery guard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/hyqw-ha-home-recipes/ha.env
+ExecStart=/usr/bin/python3 /opt/hyqw-ha-home-recipes/scripts/ha_fresh_air_guard.py --mode notify --confirm-delay 20
+
+[Install]
+WantedBy=multi-user.target

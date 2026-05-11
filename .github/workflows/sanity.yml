@@ -1,0 +1,23 @@
+name: sanity
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python-and-sanitization:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Compile Python scripts
+        run: python -m py_compile scripts/*.py
+
+      - name: Run sanitization scan
+        run: python scripts/sanitize_check.py .

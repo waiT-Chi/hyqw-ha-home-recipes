@@ -1,0 +1,10 @@
+[Unit]
+Description=Run fresh-air guard shortly after boot
+
+[Timer]
+OnBootSec=2min
+AccuracySec=30s
+Persistent=false
+
+[Install]
+WantedBy=timers.target

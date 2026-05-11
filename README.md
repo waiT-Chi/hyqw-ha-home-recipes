@@ -49,6 +49,19 @@ The original adapter solves the essential integration problem. This repo focuses
 - power-failure recovery patterns for devices that restore to an undesirable default state;
 - verification-first workflows for Home Assistant automations;
 - documentation of pitfalls that are easy to miss in real homes.
+- small, privacy-safe helper scripts for HA REST checks, sanitized entity snapshots, and leak scanning.
+
+## Code examples
+
+This repo now includes code, but only at the safe operational layer:
+
+- [`scripts/ha_fresh_air_guard.py`](scripts/ha_fresh_air_guard.py): HA REST fallback guard for fresh-air recovery checks;
+- [`scripts/ha_entity_snapshot.py`](scripts/ha_entity_snapshot.py): sanitized HA entity inventory exporter for documentation;
+- [`scripts/sanitize_check.py`](scripts/sanitize_check.py): pre-publication leak scanner;
+- [`examples/systemd/`](examples/systemd/): boot-time timer/service examples;
+- [`.github/workflows/sanity.yml`](.github/workflows/sanity.yml): CI that compiles scripts and runs the leak scanner.
+
+See [`docs/code-examples.md`](docs/code-examples.md).
 
 ## What is intentionally not included
 
@@ -67,9 +80,21 @@ Where needed, examples use placeholders such as `<DEVICE_SN>`, `<MQTT_TOPIC>`, a
 ```text
 docs/
   architecture.md              # sanitized architecture and boundaries
+  code-examples.md              # privacy-safe helper scripts
   contribution-scope.md         # what belongs here vs upstream hyqw_adapter
   patterns.md                  # reusable HA/home ops patterns
   security-and-privacy.md       # sanitization and responsible sharing notes
+
+scripts/
+  ha_fresh_air_guard.py          # HA REST fallback guard; no vendor payloads
+  ha_entity_snapshot.py          # sanitized HA entity inventory exporter
+  sanitize_check.py              # pre-publication leak scanner
+
+.github/
+  workflows/sanity.yml           # compile + sanitization CI
+
+examples/
+  systemd/                       # boot-time guard timer/service examples
 
 templates/
   home-assistant/

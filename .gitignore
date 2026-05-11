@@ -5,3 +5,6 @@
 .storage/
 secrets.yaml
 known_hosts
+*.sanitized.json
+ha.env
+entity-snapshot*.json
