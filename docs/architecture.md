@@ -52,6 +52,13 @@ exact network rules or credentials; see
 [`upstream-topology-notes.zh-CN.md`](upstream-topology-notes.zh-CN.md) for a
 sanitized Chinese explanation.
 
+For homes that want local-first control without losing the vendor cloud as an
+emergency path, use a reversible local overlay rather than a permanent DNS
+rewrite. The overlay should send only the RS-485 gateway's MQTT traffic to the
+local broker when health checks pass, then remove the overlay and restore the
+cloud path when the local broker, host, or router-side proxy becomes unhealthy.
+See [`local-mqtt-cloud-fallback.zh-CN.md`](local-mqtt-cloud-fallback.zh-CN.md).
+
 ## Important boundaries
 
 ### Adapter layer

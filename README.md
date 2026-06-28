@@ -45,6 +45,8 @@ could approach a similar deployment, see
 [`docs/implementation-playbook.zh-CN.md`](docs/implementation-playbook.zh-CN.md).
 For Chinese notes on the upstream OpenWrt / DNS / MQTT bridge topology, see
 [`docs/upstream-topology-notes.zh-CN.md`](docs/upstream-topology-notes.zh-CN.md).
+For a Chinese field note on local MQTT first with automatic cloud fallback, see
+[`docs/local-mqtt-cloud-fallback.zh-CN.md`](docs/local-mqtt-cloud-fallback.zh-CN.md).
 
 ## Architecture
 
@@ -124,6 +126,7 @@ docs/
   contribution-scope.md         # what belongs here vs upstream hyqw_adapter
   implementation-playbook.zh-CN.md # Chinese implementation playbook
   lighting-control-boundaries.md # mixed RS-485 + smart-light ownership model
+  local-mqtt-cloud-fallback.zh-CN.md # Chinese local MQTT + cloud fallback pattern
   midea-appliance-reliability.md # Midea / appliance reliability patterns
   patterns.md                  # reusable HA/home ops patterns
   reference-deployment.md      # complete scope of the referenced deployment

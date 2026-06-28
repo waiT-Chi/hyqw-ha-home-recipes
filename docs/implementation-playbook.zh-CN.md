@@ -92,6 +92,8 @@
 - 本地 MQTT bridge 能继续透传到开发商服务；
 - 原厂 App 和中控屏没有因为接管而失效。
 
+如果希望本地优先但不牺牲原厂云端退路，可以把路由侧规则做成可撤销的 `local_overlay`，并保留 `cloud_safe` 模式：本地 MQTT、Mac mini 或 ShellCrash 异常时，自动拆掉本地覆盖，让 485 网关回到开发商 MQTT。参考说明见 [`docs/local-mqtt-cloud-fallback.zh-CN.md`](local-mqtt-cloud-fallback.zh-CN.md)。
+
 ### 3. 先做命名和分组
 
 把实体按房间、用途和控制风险分类：

@@ -33,6 +33,7 @@ English: [README.md](README.md)
 
 - [`docs/implementation-playbook.zh-CN.md`](docs/implementation-playbook.zh-CN.md)：从地产 485 到 Home Assistant、米家、美的、Apple Home / Siri 的落地路线图。
 - [`docs/upstream-topology-notes.zh-CN.md`](docs/upstream-topology-notes.zh-CN.md)：上游拓扑里的 OpenWrt / DNS / MQTT bridge 思路，以及它和本仓库参考部署的关系。
+- [`docs/local-mqtt-cloud-fallback.zh-CN.md`](docs/local-mqtt-cloud-fallback.zh-CN.md)：本地 MQTT 优先、云端自动保底的路由侧落地模式。
 
 ## 架构图
 
@@ -121,6 +122,7 @@ docs/
   contribution-scope.md         # 本仓库与上游 hyqw_adapter 的分工
   implementation-playbook.zh-CN.md # 中文落地路线图
   lighting-control-boundaries.md # 485 回路 + 智能灯控制权边界
+  local-mqtt-cloud-fallback.zh-CN.md # 本地 MQTT 优先 + 云端保底
   midea-appliance-reliability.md # 美的 / 家电可靠性模式
   patterns.md                  # 可复用 HA / 家庭运维模式
   reference-deployment.md      # 参考部署的完整落地范围

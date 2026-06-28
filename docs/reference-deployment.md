@@ -63,6 +63,8 @@ This companion repo documents the home-operations layer:
 - Midea / appliance availability monitoring and verified reminders;
 - conservative HomeKit / Siri exposure;
 - power-failure recovery windows;
+- local MQTT first with an automatic cloud-safe fallback for the developer
+  RS-485 gateway;
 - sanitization rules for publishing examples without leaking home details.
 
 ## What remains private

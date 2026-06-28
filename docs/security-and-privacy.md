@@ -14,7 +14,9 @@ This project intentionally avoids publishing a complete working dump of a real h
 - HomeKit pairing codes, bridge ports, and advertised LAN addresses;
 - captured HAR files;
 - MQTT payload hex strings;
-- router scripts containing live credentials.
+- router scripts containing live credentials;
+- turnkey router scripts that can directly redirect or control a real RS-485
+  gateway.
 
 ## Use placeholders
 
