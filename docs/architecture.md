@@ -15,14 +15,12 @@ Mac mini Docker host
   ↓
 Home Assistant container + supporting service containers
   ↓
+HYQW adapter + Mijia + Midea + HomeKit bridge integrations
+  ↑
+Developer / HYQW gateway -> local/cloud MQTT path -> adapter
+  ↑
 Property RS-485 devices
-  ↓
-Developer / HYQW gateway
-  ↓
-Cloud API + MQTT status/control path
-  ↓
-Home Assistant custom integration
-  ↓
+
 Home Assistant automations, dashboards, and user-facing controls
 ```
 
@@ -35,6 +33,24 @@ In a more complete home, Home Assistant may also integrate:
 - monitoring stack such as InfluxDB + Grafana;
 - notification channels such as mobile push or chat bots;
 - optional Apple Home / Siri exposure for a curated set of daily-use devices.
+
+## Upstream network topology pattern
+
+The upstream topology emphasizes a local network interception pattern:
+
+```text
+Developer RS-485 gateway
+  -> local DNS/hosts redirect
+  -> local MQTT broker
+  -> MQTT bridge to vendor MQTT
+  -> HYQW adapter / Home Assistant entities
+```
+
+That pattern keeps the original app and wall panel usable while allowing Home
+Assistant to observe and control devices locally. This repo does not publish the
+exact network rules or credentials; see
+[`upstream-topology-notes.zh-CN.md`](upstream-topology-notes.zh-CN.md) for a
+sanitized Chinese explanation.
 
 ## Important boundaries
 

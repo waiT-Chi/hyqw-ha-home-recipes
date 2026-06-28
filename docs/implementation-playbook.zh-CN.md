@@ -4,6 +4,8 @@
 
 这里不会提供真实账号、网关序列号、MQTT topic、抓包 payload 或完整家庭配置。它讲的是一套可复用的落地思路：如何把一个原本封闭的地产 485 系统，接到 Home Assistant，再和米家、美的、Apple Home / Siri 等生态组合成日常可用的系统。
 
+如果你想先理解上游作者拓扑里 OpenWrt、DNS 重定向、本地 MQTT bridge 的作用，可以先看 [`upstream-topology-notes.zh-CN.md`](upstream-topology-notes.zh-CN.md)。
+
 ## 我实际做了什么
 
 这个项目不是单纯安装一个插件。实际落地里做了几层事情：
@@ -83,6 +85,12 @@
 先把地产 485 设备、米家设备、美的家电接入 Home Assistant，确认实体存在、状态能更新、控制不会误触发。
 
 这个阶段不要急着写复杂自动化。先观察几天，记录哪些实体稳定、哪些状态经常延迟、哪些设备会 `unavailable`。
+
+如果采用上游那种 OpenWrt / DNS / MQTT bridge 拓扑，建议先验证三件事：
+
+- 485 网关确实连到了本地 MQTT；
+- 本地 MQTT bridge 能继续透传到开发商服务；
+- 原厂 App 和中控屏没有因为接管而失效。
 
 ### 3. 先做命名和分组
 

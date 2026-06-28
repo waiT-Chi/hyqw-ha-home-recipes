@@ -32,6 +32,7 @@ English: [README.md](README.md)
 如果你想了解“具体做了什么、别人怎么按这个思路落地”，可以先看这篇中文说明：
 
 - [`docs/implementation-playbook.zh-CN.md`](docs/implementation-playbook.zh-CN.md)：从地产 485 到 Home Assistant、米家、美的、Apple Home / Siri 的落地路线图。
+- [`docs/upstream-topology-notes.zh-CN.md`](docs/upstream-topology-notes.zh-CN.md)：上游拓扑里的 OpenWrt / DNS / MQTT bridge 思路，以及它和本仓库参考部署的关系。
 
 ## 架构图
 
@@ -124,6 +125,7 @@ docs/
   patterns.md                  # 可复用 HA / 家庭运维模式
   reference-deployment.md      # 参考部署的完整落地范围
   security-and-privacy.md       # 去敏和负责任分享说明
+  upstream-topology-notes.zh-CN.md # 上游网络接管拓扑说明
   xiaomi-home-migration.md      # Xiaomi Home 低风险迁移模式
 
 scripts/

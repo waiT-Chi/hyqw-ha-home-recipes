@@ -43,6 +43,8 @@ See [`docs/reference-deployment.md`](docs/reference-deployment.md).
 For a Chinese field guide that explains what was built and how another homeowner
 could approach a similar deployment, see
 [`docs/implementation-playbook.zh-CN.md`](docs/implementation-playbook.zh-CN.md).
+For Chinese notes on the upstream OpenWrt / DNS / MQTT bridge topology, see
+[`docs/upstream-topology-notes.zh-CN.md`](docs/upstream-topology-notes.zh-CN.md).
 
 ## Architecture
 
@@ -126,6 +128,7 @@ docs/
   patterns.md                  # reusable HA/home ops patterns
   reference-deployment.md      # complete scope of the referenced deployment
   security-and-privacy.md       # sanitization and responsible sharing notes
+  upstream-topology-notes.zh-CN.md # Chinese notes on upstream network topology
   xiaomi-home-migration.md      # staged Xiaomi Home migration pattern
 
 scripts/
