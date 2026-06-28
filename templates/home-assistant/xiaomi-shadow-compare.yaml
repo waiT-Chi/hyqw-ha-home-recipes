@@ -1,0 +1,39 @@
+# Xiaomi Home migration shadow-compare pattern
+#
+# Purpose:
+# - Compare an old Xiaomi/Miot entity with a newer Xiaomi Home entity before
+#   switching automations over.
+# - Notify only when the drift is meaningful and persistent.
+#
+# Replace:
+# - sensor.<OLD_XIAOMI_ENTITY>
+# - sensor.<NEW_XIAOMI_HOME_ENTITY>
+# - notify.<YOUR_NOTIFY_SERVICE>
+#
+# Example threshold below is 10 units. Adjust it for the sensor type.
+
+- id: xiaomi_entity_shadow_compare
+  alias: Xiaomi migration - shadow compare entities
+  description: During migration, compare old and new Xiaomi readings and notify if they drift persistently.
+  mode: single
+  triggers:
+    - platform: time_pattern
+      minutes: "/15"
+  conditions:
+    - condition: template
+      value_template: >-
+        {{ states('sensor.<OLD_XIAOMI_ENTITY>') not in ['unknown', 'unavailable', 'none']
+           and states('sensor.<NEW_XIAOMI_HOME_ENTITY>') not in ['unknown', 'unavailable', 'none'] }}
+    - condition: template
+      value_template: >-
+        {{ (states('sensor.<OLD_XIAOMI_ENTITY>') | float(0)
+            - states('sensor.<NEW_XIAOMI_HOME_ENTITY>') | float(0)) | abs > 10 }}
+  actions:
+    - action: notify.<YOUR_NOTIFY_SERVICE>
+      data:
+        title: Xiaomi entity migration drift
+        message: >-
+          Old reading={{ states('sensor.<OLD_XIAOMI_ENTITY>') }},
+          new reading={{ states('sensor.<NEW_XIAOMI_HOME_ENTITY>') }}.
+          Keep the old entity as fallback until the readings are understood.
+

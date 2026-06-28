@@ -1,0 +1,44 @@
+# Lighting scene boundary pattern
+#
+# Purpose:
+# - Ensure a developer/RS-485 main circuit is on before applying a user-facing
+#   room scene.
+# - Keep the circuit guard separate from individual smart-light behavior.
+#
+# Replace:
+# - light.<MAIN_CIRCUIT_ENTITY> with the main circuit entity.
+# - scene.<ROOM_SCENE_ENTITY> with a user-facing HA scene.
+# - light.<PRIMARY_ROOM_LIGHT_ENTITY> with one downstream light used for read-back.
+# - notify.<YOUR_NOTIFY_SERVICE> with your notification service.
+
+- id: room_scene_with_main_circuit_precheck
+  alias: Room lighting - scene with main circuit precheck
+  description: Turn on the main circuit first, apply the room scene, then verify one downstream light reached the expected state.
+  mode: restart
+  triggers:
+    - platform: state
+      entity_id: input_button.<ROOM_SCENE_BUTTON>
+  conditions: []
+  actions:
+    - action: light.turn_on
+      target:
+        entity_id: light.<MAIN_CIRCUIT_ENTITY>
+    - delay:
+        seconds: 2
+    - condition: state
+      entity_id: light.<MAIN_CIRCUIT_ENTITY>
+      state: "on"
+    - action: scene.turn_on
+      target:
+        entity_id: scene.<ROOM_SCENE_ENTITY>
+    - delay:
+        seconds: 3
+    - condition: not
+      conditions:
+        - condition: state
+          entity_id: light.<PRIMARY_ROOM_LIGHT_ENTITY>
+          state: "on"
+    - action: notify.<YOUR_NOTIFY_SERVICE>
+      data:
+        title: Lighting scene needs attention
+        message: "The room scene was requested, but the downstream light did not report ON after verification."

@@ -29,6 +29,7 @@ In a more complete home, Home Assistant may also integrate:
 - MQTT broker or bridge;
 - monitoring stack such as InfluxDB + Grafana;
 - notification channels such as mobile push or chat bots.
+- optional Apple Home / Siri exposure for a curated set of daily-use devices.
 
 ## Important boundaries
 
@@ -49,21 +50,22 @@ This companion repo focuses on the home-operations layer:
 - how to structure automations so different control systems do not fight each other;
 - how to verify state changes rather than trusting service-call success;
 - how to design power-failure recovery without depending on a desktop machine being logged in;
+- how to expose only daily-use devices to voice assistants while keeping admin controls private;
 - how to document and audit assumptions safely.
 
 ## Design principles
 
-1. **Manual control wins**  
+1. **Manual control wins**
    Automations should not make wall switches or household habits feel broken.
 
-2. **Control the right abstraction**  
+2. **Control the right abstraction**
    A main circuit switch is not the same thing as the individual smart lights downstream of it.
 
-3. **Verify physical state**  
+3. **Verify physical state**
    Some integrations update Home Assistant optimistically after an API call. Confirm with a state query or device feedback when the distinction matters.
 
-4. **Avoid publishing secrets**  
+4. **Avoid publishing secrets**
    Never publish serial numbers, cloud tokens, raw MQTT payloads, full HAR files, or exact private topic strings.
 
-5. **Make failure modes explicit**  
+5. **Make failure modes explicit**
    Power loss, cloud outage, local network failure, and Home Assistant downtime are separate cases.

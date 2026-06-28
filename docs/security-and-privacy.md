@@ -10,6 +10,8 @@ This project intentionally avoids publishing a complete working dump of a real h
 - exact gateway serial numbers;
 - exact home domain names;
 - exact private IP topology;
+- exact room layouts and household routines;
+- HomeKit pairing codes, bridge ports, and advertised LAN addresses;
 - captured HAR files;
 - MQTT payload hex strings;
 - router scripts containing live credentials.

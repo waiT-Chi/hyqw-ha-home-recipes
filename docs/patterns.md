@@ -70,3 +70,44 @@ Do not publish:
 - device serial numbers or account IDs.
 
 Publish only redacted templates and explain the reasoning.
+
+## Pattern 5: Mixed lighting ownership
+
+Do not treat a main RS-485 circuit and a downstream smart light as equivalent.
+The circuit provides power. The smart light owns the user-facing brightness,
+color, and switch behavior.
+
+See:
+
+- [`docs/lighting-control-boundaries.md`](lighting-control-boundaries.md)
+- [`templates/home-assistant/lighting-scene-boundary.yaml`](../templates/home-assistant/lighting-scene-boundary.yaml)
+
+## Pattern 6: Xiaomi Home shadow migration
+
+When replacing old Xiaomi/Miot entities with Xiaomi Home entities, run both
+paths side by side first. Compare readings, update dashboards before controls,
+and keep the old path as fallback until the new entity is stable.
+
+See:
+
+- [`docs/xiaomi-home-migration.md`](xiaomi-home-migration.md)
+- [`templates/home-assistant/xiaomi-shadow-compare.yaml`](../templates/home-assistant/xiaomi-shadow-compare.yaml)
+
+## Pattern 7: Appliance reliability before automation
+
+For Midea, Toshiba, and similar appliance integrations, track availability
+separately from appliance state. Completion reminders should verify state after a
+short delay instead of trusting a single transition.
+
+See:
+
+- [`docs/midea-appliance-reliability.md`](midea-appliance-reliability.md)
+- [`templates/home-assistant/midea-availability-watch.yaml`](../templates/home-assistant/midea-availability-watch.yaml)
+
+## Pattern 8: Curated voice-assistant exposure
+
+Expose only daily-use devices to Apple Home or other voice assistants. Keep
+admin switches, duplicate entities, unsafe power circuits, and debug helpers out
+of the bridge.
+
+See [`docs/apple-home-siri-exposure.md`](apple-home-siri-exposure.md).

@@ -1,0 +1,50 @@
+# Midea appliance availability and completion patterns
+#
+# Purpose:
+# - Make appliance integration instability visible.
+# - Avoid sending completion reminders from transient or stale states.
+#
+# Replace:
+# - sensor.<APPLIANCE_STATE_ENTITY>
+# - notify.<YOUR_NOTIFY_SERVICE>
+#
+# Adjust state names to match your appliance integration.
+
+- id: appliance_unavailable_watch
+  alias: Appliance - unavailable watch
+  description: Notify when an appliance entity remains unavailable long enough to matter.
+  mode: single
+  triggers:
+    - platform: state
+      entity_id: sensor.<APPLIANCE_STATE_ENTITY>
+      to: "unavailable"
+      for:
+        minutes: 20
+  conditions: []
+  actions:
+    - action: notify.<YOUR_NOTIFY_SERVICE>
+      data:
+        title: Appliance integration unavailable
+        message: "The appliance entity has been unavailable for 20 minutes. Check the integration before relying on automation state."
+
+- id: appliance_finished_verified_reminder
+  alias: Appliance - finished verified reminder
+  description: Notify only after a running-to-finished transition remains stable after read-back.
+  mode: restart
+  triggers:
+    - platform: state
+      entity_id: sensor.<APPLIANCE_STATE_ENTITY>
+      from: "running"
+      to: "finished"
+  conditions: []
+  actions:
+    - delay:
+        minutes: 2
+    - condition: state
+      entity_id: sensor.<APPLIANCE_STATE_ENTITY>
+      state: "finished"
+    - action: notify.<YOUR_NOTIFY_SERVICE>
+      data:
+        title: Appliance finished
+        message: "The appliance still reports finished after verification."
+

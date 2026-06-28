@@ -33,6 +33,7 @@ flowchart TD
     F --> J[自动化<br/>控制边界规则]
     F --> K[仪表盘 / 监控]
     F --> L[通知 / Agent 工作流]
+    F --> N[可选 Apple Home / Siri 桥接]
 
     M[路由器或常在线边缘 watchdog<br/>仅记录设计模式] -. 恢复窗口 .-> B
     M -. fallback 检查 .-> C
@@ -50,6 +51,10 @@ flowchart TD
 - 如何把地产 485 网关、Home Assistant、MQTT、米家、美的等生态组合成稳定系统；
 - 如何设计“控制边界”，例如一路开关保持供电，具体智能灯仍由物理/蓝牙开关控制；
 - 如何处理断电后来电时某些设备恢复到错误默认状态；
+- 如何处理地产 485 回路、米家智能灯和 HA 场景之间的灯光控制权边界；
+- 如何低风险迁移 Xiaomi Miot / 米家实体到 Xiaomi Home，并保留 fallback；
+- 如何把美的 / 东芝等家电的不稳定状态显性化，而不是假设云端状态永远可靠；
+- 如何有选择地把 HA 设备暴露给 Apple Home / Siri；
 - 如何在 Home Assistant 修改自动化后做写后验证，而不是只相信 API 返回成功；
 - 记录真实家庭里容易踩坑、但官方文档通常不会覆盖的问题。
 - 提供少量去敏后的辅助脚本，用于 HA REST 检查、实体清单去敏导出和发布前泄密扫描。
@@ -71,6 +76,7 @@ flowchart TD
 为了保护隐私，也为了避免被直接复制成商业交付包，本仓库故意不包含：
 
 - 云端 token、账号 ID、设备序列号、MQTT 凭证、家庭 IP、域名、真实 topic；
+- 真实户型、家庭作息、HomeKit 配对码、桥接端口和局域网广播地址；
 - 抓包得到的二进制 payload 或 `payload_hex`；
 - 可直接复制运行的路由器 watchdog 完整代码；
 - 厂商私有 API 凭证或完整数据导出；
@@ -89,10 +95,14 @@ flowchart TD
 ```text
 docs/
   architecture.md              # 去敏架构和边界说明
+  apple-home-siri-exposure.md  # Apple Home / Siri 选择性暴露策略
   code-examples.md              # 去敏后的辅助代码说明
   contribution-scope.md         # 本仓库与上游 hyqw_adapter 的分工
+  lighting-control-boundaries.md # 485 回路 + 智能灯控制权边界
+  midea-appliance-reliability.md # 美的 / 家电可靠性模式
   patterns.md                  # 可复用 HA / 家庭运维模式
   security-and-privacy.md       # 去敏和负责任分享说明
+  xiaomi-home-migration.md      # Xiaomi Home 低风险迁移模式
 
 scripts/
   ha_fresh_air_guard.py          # HA REST 新风恢复防护脚本，不含厂商 payload
@@ -109,6 +119,9 @@ templates/
   home-assistant/
     kitchen-main-switch.yaml    # 一路开关常亮模板
     fresh-air-ha-guard.yaml     # HA 侧新风恢复防护模板
+    lighting-scene-boundary.yaml # 带回路预检查的房间场景模板
+    midea-availability-watch.yaml # 家电可用性与完成提醒模板
+    xiaomi-shadow-compare.yaml   # 米家新旧实体迁移对比模板
   router-watchdog/
     README.md                   # 设计说明，不提供可直接商用的脚本
 ```

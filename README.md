@@ -33,6 +33,7 @@ flowchart TD
     F --> J[Automations<br/>control-boundary rules]
     F --> K[Dashboards / monitoring]
     F --> L[Notifications / agent workflows]
+    F --> N[Optional Apple Home / Siri bridge]
 
     M[Router or always-on edge watchdog<br/>design pattern only] -. recovery window .-> B
     M -. fallback check .-> C
@@ -47,6 +48,10 @@ The original adapter solves the essential integration problem. This repo focuses
 - production-style architecture for combining a property RS-485 gateway, Home Assistant, MQTT, and other smart-home ecosystems;
 - safe control-boundary patterns, such as keeping a main power circuit on while leaving individual smart lights under manual control;
 - power-failure recovery patterns for devices that restore to an undesirable default state;
+- lighting ownership patterns for rooms that mix RS-485 circuits with Mijia or other smart lights;
+- staged Xiaomi Home migration patterns with old-entity fallbacks;
+- Midea / appliance reliability patterns for availability monitoring and verified reminders;
+- conservative Apple Home / Siri exposure guidance;
 - verification-first workflows for Home Assistant automations;
 - documentation of pitfalls that are easy to miss in real homes.
 - small, privacy-safe helper scripts for HA REST checks, sanitized entity snapshots, and leak scanning.
@@ -68,6 +73,7 @@ See [`docs/code-examples.md`](docs/code-examples.md).
 To protect privacy and reduce copy-paste misuse, this repo intentionally excludes:
 
 - cloud tokens, account IDs, device serial numbers, MQTT credentials, home IPs, domain names, and exact topic strings;
+- exact room layouts, household routines, pairing codes, bridge ports, and advertised LAN addresses;
 - captured binary payloads or `payload_hex` values;
 - turnkey router watchdog code that can be directly repurposed as a commercial product;
 - any vendor-private API credentials or proprietary data dumps;
@@ -80,10 +86,14 @@ Where needed, examples use placeholders such as `<DEVICE_SN>`, `<MQTT_TOPIC>`, a
 ```text
 docs/
   architecture.md              # sanitized architecture and boundaries
+  apple-home-siri-exposure.md  # selective HomeKit / Siri exposure guidance
   code-examples.md              # privacy-safe helper scripts
   contribution-scope.md         # what belongs here vs upstream hyqw_adapter
+  lighting-control-boundaries.md # mixed RS-485 + smart-light ownership model
+  midea-appliance-reliability.md # Midea / appliance reliability patterns
   patterns.md                  # reusable HA/home ops patterns
   security-and-privacy.md       # sanitization and responsible sharing notes
+  xiaomi-home-migration.md      # staged Xiaomi Home migration pattern
 
 scripts/
   ha_fresh_air_guard.py          # HA REST fallback guard; no vendor payloads
@@ -100,6 +110,9 @@ templates/
   home-assistant/
     kitchen-main-switch.yaml    # main-circuit keep-on pattern
     fresh-air-ha-guard.yaml     # HA-only fallback guard pattern
+    lighting-scene-boundary.yaml # room scene with circuit precheck
+    midea-availability-watch.yaml # appliance availability + completion patterns
+    xiaomi-shadow-compare.yaml   # compare old/new Xiaomi entities during migration
   router-watchdog/
     README.md                   # design notes, not turnkey code
 ```
