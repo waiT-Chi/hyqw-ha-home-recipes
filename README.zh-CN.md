@@ -15,6 +15,23 @@ English: [README.md](README.md)
 
 本仓库是一个 companion repo，主要整理**去敏后的运维经验、架构说明和 Home Assistant 自动化模板**。
 
+## 实际落地范围
+
+这个仓库记录的不是“安装一个插件”这么窄的事情。参考部署中，业主在 `origintree/hyqw_adapter` 之上，把地产交付的 485 智能家居系统接入 Home Assistant，并继续打通米家 / Xiaomi Home / Xiaomi Miot、美的 / 东芝等家电、Apple Home / Siri，以及自动化、通知、监控和恢复检查。
+
+换句话说：
+
+- `hyqw_adapter` 是地产 485 设备进入 Home Assistant 的 adapter 层；
+- 这个仓库记录的是 adapter 之上的完整家庭运维层；
+- 实际工作包括多生态接入、控制权边界设计、状态验证、故障恢复、Siri 暴露策略和隐私去敏；
+- 部署过程中发现并反馈了上游 adapter 的兼容性问题，例如硬编码校验值、`paho-mqtt` 2.x 兼容和 MQTT 连接循环问题。
+
+详细说明见 [`docs/reference-deployment.md`](docs/reference-deployment.md)。
+
+如果你想了解“具体做了什么、别人怎么按这个思路落地”，可以先看这篇中文说明：
+
+- [`docs/implementation-playbook.zh-CN.md`](docs/implementation-playbook.zh-CN.md)：从地产 485 到 Home Assistant、米家、美的、Apple Home / Siri 的落地路线图。
+
 ## 架构图
 
 ```mermaid
@@ -98,9 +115,11 @@ docs/
   apple-home-siri-exposure.md  # Apple Home / Siri 选择性暴露策略
   code-examples.md              # 去敏后的辅助代码说明
   contribution-scope.md         # 本仓库与上游 hyqw_adapter 的分工
+  implementation-playbook.zh-CN.md # 中文落地路线图
   lighting-control-boundaries.md # 485 回路 + 智能灯控制权边界
   midea-appliance-reliability.md # 美的 / 家电可靠性模式
   patterns.md                  # 可复用 HA / 家庭运维模式
+  reference-deployment.md      # 参考部署的完整落地范围
   security-and-privacy.md       # 去敏和负责任分享说明
   xiaomi-home-migration.md      # Xiaomi Home 低风险迁移模式
 

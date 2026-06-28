@@ -15,6 +15,32 @@ The core adapter used in the referenced deployment is the open-source project:
 
 This repository is a companion collection of **sanitized operational recipes, architecture notes, and Home Assistant automation templates** learned from a real deployment.
 
+## Reference deployment scope
+
+This repo is not just about installing one integration. In the referenced
+deployment, the homeowner used `origintree/hyqw_adapter` as the adapter layer for
+the property-developer RS-485 system, then built a broader Home Assistant
+operations layer around it: Mijia / Xiaomi Home / Xiaomi Miot, Midea / Toshiba
+appliances, Apple Home / Siri, automations, notifications, monitoring, and
+recovery checks.
+
+In short:
+
+- `hyqw_adapter` brings the property RS-485 devices into Home Assistant;
+- this repo documents the whole-home operations layer above the adapter;
+- the practical work includes multi-ecosystem integration, control-boundary
+  design, state verification, recovery handling, Siri exposure strategy, and
+  privacy-safe publishing;
+- field deployment also surfaced upstream adapter compatibility issues, such as
+  hard-coded validation values, `paho-mqtt` 2.x compatibility, and MQTT
+  connection-loop behavior.
+
+See [`docs/reference-deployment.md`](docs/reference-deployment.md).
+
+For a Chinese field guide that explains what was built and how another homeowner
+could approach a similar deployment, see
+[`docs/implementation-playbook.zh-CN.md`](docs/implementation-playbook.zh-CN.md).
+
 ## Architecture
 
 ```mermaid
@@ -89,9 +115,11 @@ docs/
   apple-home-siri-exposure.md  # selective HomeKit / Siri exposure guidance
   code-examples.md              # privacy-safe helper scripts
   contribution-scope.md         # what belongs here vs upstream hyqw_adapter
+  implementation-playbook.zh-CN.md # Chinese implementation playbook
   lighting-control-boundaries.md # mixed RS-485 + smart-light ownership model
   midea-appliance-reliability.md # Midea / appliance reliability patterns
   patterns.md                  # reusable HA/home ops patterns
+  reference-deployment.md      # complete scope of the referenced deployment
   security-and-privacy.md       # sanitization and responsible sharing notes
   xiaomi-home-migration.md      # staged Xiaomi Home migration pattern
 

@@ -26,6 +26,7 @@ This repo is for deployment recipes and operational knowledge that are useful bu
 
 - architecture notes;
 - automation patterns;
+- multi-ecosystem deployment notes that combine HYQW, Home Assistant, Xiaomi, Midea, and Apple Home;
 - privacy-safe troubleshooting workflows;
 - power-failure recovery design;
 - examples of control-boundary separation;

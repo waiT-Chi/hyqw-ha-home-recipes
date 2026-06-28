@@ -6,7 +6,7 @@ This document describes the architecture pattern, not a copy-paste deployment.
 
 Many residential projects ship with a property-developer smart-home system based on an RS-485 gateway. It may control lights, HVAC, floor heating, curtains, fresh air systems, and other fixed infrastructure. These systems often expose a mobile app and a cloud backend but do not integrate cleanly with Home Assistant, Apple Home, Xiaomi/Mijia, or other ecosystems.
 
-The referenced deployment uses the upstream [`origintree/hyqw_adapter`](https://github.com/origintree/hyqw_adapter) integration as the adapter layer, then adds operational glue around it.
+The referenced deployment uses the upstream [`origintree/hyqw_adapter`](https://github.com/origintree/hyqw_adapter) integration as the adapter layer, then adds a full home-operations layer around it. See [`reference-deployment.md`](reference-deployment.md) for the scope of that real deployment.
 
 ## High-level architecture
 
@@ -28,7 +28,7 @@ In a more complete home, Home Assistant may also integrate:
 - Midea / Toshiba / appliance LAN integrations;
 - MQTT broker or bridge;
 - monitoring stack such as InfluxDB + Grafana;
-- notification channels such as mobile push or chat bots.
+- notification channels such as mobile push or chat bots;
 - optional Apple Home / Siri exposure for a curated set of daily-use devices.
 
 ## Important boundaries
@@ -47,6 +47,7 @@ The upstream adapter owns the protocol-specific work:
 
 This companion repo focuses on the home-operations layer:
 
+- how to combine the HYQW adapter with Xiaomi, Midea, Apple Home, and other ecosystems;
 - how to structure automations so different control systems do not fight each other;
 - how to verify state changes rather than trusting service-call success;
 - how to design power-failure recovery without depending on a desktop machine being logged in;
