@@ -18,8 +18,9 @@ This repository is a companion collection of **sanitized operational recipes, ar
 ## Reference deployment scope
 
 This repo is not just about installing one integration. In the referenced
-deployment, the homeowner used `origintree/hyqw_adapter` as the adapter layer for
-the property-developer RS-485 system, then built a broader Home Assistant
+deployment, the homeowner runs Home Assistant and supporting services as Docker
+containers on a Mac mini, uses `origintree/hyqw_adapter` as the adapter layer for
+the property-developer RS-485 system, then builds a broader Home Assistant
 operations layer around it: Mijia / Xiaomi Home / Xiaomi Miot, Midea / Toshiba
 appliances, Apple Home / Siri, automations, notifications, monitoring, and
 recovery checks.
@@ -27,6 +28,8 @@ recovery checks.
 In short:
 
 - `hyqw_adapter` brings the property RS-485 devices into Home Assistant;
+- Mac mini + Docker acts as the host layer for Home Assistant and nearby
+  services;
 - this repo documents the whole-home operations layer above the adapter;
 - the practical work includes multi-ecosystem integration, control-boundary
   design, state verification, recovery handling, Siri exposure strategy, and
@@ -50,11 +53,13 @@ flowchart TD
     B --> D[MQTT status/control path]
     C --> E[origintree/hyqw_adapter<br/>Home Assistant custom integration]
     D --> E
-    E --> F[Home Assistant]
+    O[Mac mini<br/>Docker host] --> F[Home Assistant container]
+    E --> F
 
     G[Mijia / Xiaomi devices] --> F
     H[Midea / Toshiba appliances] --> F
-    I[Optional local MQTT broker / bridge] --> F
+    O --> I[Optional local MQTT broker / bridge]
+    I --> F
 
     F --> J[Automations<br/>control-boundary rules]
     F --> K[Dashboards / monitoring]

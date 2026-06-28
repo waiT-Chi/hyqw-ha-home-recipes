@@ -11,22 +11,25 @@
 1. **接入地产 485 系统**
    使用上游 `origintree/hyqw_adapter` 作为 adapter，把地产交付的灯光、空调、地暖、窗帘、新风等设备实体化到 Home Assistant。
 
-2. **修正真实部署中遇到的问题**
+2. **搭建本地承载环境**
+   使用 Mac mini 作为家里的常在线主机，把 Home Assistant 和周边服务放在 Docker 里运行，方便长期运行、重启、备份和迁移。
+
+3. **修正真实部署中遇到的问题**
    在实际 Home Assistant 环境里发现 adapter 存在一些兼容性问题，例如硬编码校验值、`paho-mqtt` 2.x 兼容、MQTT 连接循环过早退出、HAR/base URL 假设等，并把问题反馈给上游。
 
-3. **把米家设备纳入同一个控制平面**
+4. **把米家设备纳入同一个控制平面**
    将米家 / Xiaomi Miot / Xiaomi Home 设备接入 Home Assistant，并用影子对比、历史观察和 fallback 的方式逐步迁移，不一次性替换所有实体。
 
-4. **把美的等家电纳入可见状态**
+5. **把美的等家电纳入可见状态**
    对美的 / 东芝等家电，不假设云端状态永远可靠，而是把 `unavailable`、状态延迟和完成提醒这些问题显性化。
 
-5. **打通 Apple Home / Siri**
+6. **打通 Apple Home / Siri**
    通过 HomeKit Bridge 把适合日常控制的设备暴露给 Apple Home 和 Siri，但不暴露管理开关、重复实体、危险电源回路和调试开关。
 
-6. **建立自动化和控制边界**
+7. **建立自动化和控制边界**
    区分“地产 485 主回路”和“下游智能灯”的控制权，避免 Home Assistant、米家、墙面开关、Siri 互相打架。
 
-7. **做恢复和验证**
+8. **做恢复和验证**
    对断电恢复、设备重连、HA 启动、服务调用后状态确认等场景做防护。关键动作不只相信 API 返回成功，而是读回状态再判断。
 
 ## 总体架构思路
@@ -34,6 +37,9 @@
 推荐把系统分成四层：
 
 ```text
+承载层
+  Mac mini / Docker / 持久化目录 / 备份
+
 设备接入层
   HYQW adapter / 米家 / 美的 / MQTT / 其他集成
 
@@ -57,13 +63,28 @@
 
 ## 推荐落地顺序
 
-### 1. 先接入，不急着自动化
+### 1. 先确定承载方式
+
+参考部署使用 Mac mini 作为常在线主机，并用 Docker 运行 Home Assistant 和周边服务。这样做的好处是服务边界清楚，配置和数据目录更容易备份，后续迁移到其他主机也更可控。
+
+落地时建议先想清楚：
+
+- Home Assistant 的配置目录放在哪里；
+- 哪些服务必须随 HA 长期运行；
+- 哪些服务只是监控、通知或辅助工具；
+- 容器重启策略如何设置；
+- 如何备份配置、数据库和关键持久化目录；
+- 断电重启后，哪些服务需要自动恢复。
+
+不建议一开始就把所有东西都放进来。先让 HA 稳定运行，再逐步加 MQTT、监控、通知、辅助脚本等周边服务。
+
+### 2. 先接入，不急着自动化
 
 先把地产 485 设备、米家设备、美的家电接入 Home Assistant，确认实体存在、状态能更新、控制不会误触发。
 
 这个阶段不要急着写复杂自动化。先观察几天，记录哪些实体稳定、哪些状态经常延迟、哪些设备会 `unavailable`。
 
-### 2. 先做命名和分组
+### 3. 先做命名和分组
 
 把实体按房间、用途和控制风险分类：
 
@@ -74,7 +95,7 @@
 
 后续是否暴露给 Siri、是否进入 dashboard、是否参与自动化，都从这个分类出发。
 
-### 3. 处理控制边界
+### 4. 处理控制边界
 
 精装系统里经常会出现这种情况：
 
@@ -98,7 +119,7 @@
 - [`templates/home-assistant/kitchen-main-switch.yaml`](../templates/home-assistant/kitchen-main-switch.yaml)
 - [`templates/home-assistant/lighting-scene-boundary.yaml`](../templates/home-assistant/lighting-scene-boundary.yaml)
 
-### 4. 米家迁移要小步走
+### 5. 米家迁移要小步走
 
 如果同一个设备同时出现在 Xiaomi Miot 和 Xiaomi Home，不要立刻全量替换。
 
@@ -116,7 +137,7 @@
 - [`docs/xiaomi-home-migration.md`](xiaomi-home-migration.md)
 - [`templates/home-assistant/xiaomi-shadow-compare.yaml`](../templates/home-assistant/xiaomi-shadow-compare.yaml)
 
-### 5. 美的等家电先做可观测性
+### 6. 美的等家电先做可观测性
 
 家电集成最容易踩的坑是：实体还在，但状态不一定可靠；服务调用成功，也不代表设备真的执行成功。
 
@@ -132,7 +153,7 @@
 - [`docs/midea-appliance-reliability.md`](midea-appliance-reliability.md)
 - [`templates/home-assistant/midea-availability-watch.yaml`](../templates/home-assistant/midea-availability-watch.yaml)
 
-### 6. Siri 只暴露日常设备
+### 7. Siri 只暴露日常设备
 
 Apple Home / Siri 很方便，但不适合暴露所有 HA 实体。
 
@@ -191,6 +212,7 @@ Apple Home / Siri 很方便，但不适合暴露所有 HA 实体。
 
 第一批建议只做：
 
+- 在 Mac mini / Docker 上稳定运行 HA；
 - 接入 adapter；
 - 接入米家和家电；
 - 整理实体命名；

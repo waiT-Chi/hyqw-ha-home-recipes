@@ -17,11 +17,12 @@ English: [README.md](README.md)
 
 ## 实际落地范围
 
-这个仓库记录的不是“安装一个插件”这么窄的事情。参考部署中，业主在 `origintree/hyqw_adapter` 之上，把地产交付的 485 智能家居系统接入 Home Assistant，并继续打通米家 / Xiaomi Home / Xiaomi Miot、美的 / 东芝等家电、Apple Home / Siri，以及自动化、通知、监控和恢复检查。
+这个仓库记录的不是“安装一个插件”这么窄的事情。参考部署中，业主在 Mac mini 上用 Docker 承载 Home Assistant 和周边服务，在 `origintree/hyqw_adapter` 之上，把地产交付的 485 智能家居系统接入 Home Assistant，并继续打通米家 / Xiaomi Home / Xiaomi Miot、美的 / 东芝等家电、Apple Home / Siri，以及自动化、通知、监控和恢复检查。
 
 换句话说：
 
 - `hyqw_adapter` 是地产 485 设备进入 Home Assistant 的 adapter 层；
+- Mac mini + Docker 是承载层，负责让 HA 和周边服务长期运行、便于备份和迁移；
 - 这个仓库记录的是 adapter 之上的完整家庭运维层；
 - 实际工作包括多生态接入、控制权边界设计、状态验证、故障恢复、Siri 暴露策略和隐私去敏；
 - 部署过程中发现并反馈了上游 adapter 的兼容性问题，例如硬编码校验值、`paho-mqtt` 2.x 兼容和 MQTT 连接循环问题。
@@ -41,11 +42,13 @@ flowchart TD
     B --> D[MQTT 状态/控制链路]
     C --> E[origintree/hyqw_adapter<br/>Home Assistant 自定义集成]
     D --> E
-    E --> F[Home Assistant]
+    O[Mac mini<br/>Docker host] --> F[Home Assistant container]
+    E --> F
 
     G[米家 / 小米设备] --> F
     H[美的 / 东芝等家电] --> F
-    I[可选本地 MQTT broker / bridge] --> F
+    O --> I[可选本地 MQTT broker / bridge]
+    I --> F
 
     F --> J[自动化<br/>控制边界规则]
     F --> K[仪表盘 / 监控]

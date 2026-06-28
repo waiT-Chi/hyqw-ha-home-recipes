@@ -8,11 +8,28 @@ project is treated as the adapter layer for the property-developer RS-485
 system. The referenced deployment then builds a complete Home Assistant
 operations layer above it.
 
+## Host layer
+
+The referenced deployment runs on a Mac mini. Home Assistant and nearby
+supporting services are containerized with Docker so they can be managed,
+backed up, restarted, and migrated as service units rather than as one-off
+manual installs.
+
+The public docs intentionally do not publish exact compose files, host paths,
+ports, LAN addresses, or secrets. The reusable point is the host pattern:
+
+- keep Home Assistant and supporting services on an always-on local machine;
+- use containers for repeatable service boundaries;
+- keep persistent volumes and backups explicit;
+- document which services are required for daily control versus optional
+  monitoring or notification workflows.
+
 ## What was built on top of the adapter
 
 The deployment brings several ecosystems into one Home Assistant control plane:
 
 - property-developer RS-485 devices through the HYQW adapter;
+- Home Assistant and nearby services running as Docker containers on a Mac mini;
 - Mijia / Xiaomi Home / Xiaomi Miot devices;
 - Midea / Toshiba and similar appliance integrations;
 - optional local MQTT broker or bridge paths;

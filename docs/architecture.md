@@ -11,6 +11,10 @@ The referenced deployment uses the upstream [`origintree/hyqw_adapter`](https://
 ## High-level architecture
 
 ```text
+Mac mini Docker host
+  ↓
+Home Assistant container + supporting service containers
+  ↓
 Property RS-485 devices
   ↓
 Developer / HYQW gateway
@@ -24,6 +28,7 @@ Home Assistant automations, dashboards, and user-facing controls
 
 In a more complete home, Home Assistant may also integrate:
 
+- a Mac mini host running Home Assistant and nearby services in Docker;
 - Mijia / Xiaomi devices;
 - Midea / Toshiba / appliance LAN integrations;
 - MQTT broker or bridge;
